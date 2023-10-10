@@ -1,95 +1,125 @@
-import Image from 'next/image'
-import styles from './page.module.css'
+"use client";
+import styles from "./page.module.css";
+import { useForm } from "react-hook-form";
+import { Container, Row, Col, FormGroup, FormText } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css"; //Installer bootstrap for at denne virker
+import { yupResolver } from "@hookform/resolvers/yup"; //Valider data via skema
+import * as yup from "yup";
 
 export default function Home() {
+
+  const schema = yup.object().shape({
+    firstName: yup
+    .string()
+    .required('Your name is required'),
+
+    age: yup
+    .number()
+    .typeError('Your age is required')
+    .required('Has to be filled')
+    .min(18, 'You have to be over the age of 18')
+    .max(99, 'You have to be under the age of 99'),
+
+    email: yup
+    .string()
+    .email('Invalid email format')
+    .required('Your email is required'),
+
+
+    terms: yup
+    .bool()
+    .oneOf([true], 'Agree on terms and conditions')
+
+  });
+
+  const { register, handleSubmit, formState: { errors },} = useForm({
+    resolver: yupResolver(schema)
+  });
+
+  const onSubmit = (data) => console.log(data);
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
+    <></>
+    // <div id={styles.formContainer}>
+    //   <h1>Validering</h1>
+    //   <form onSubmit={handleSubmit(onSubmit)}>
 
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
+    //     {/* ---- FIRST NAME ---- */}
+    //     <Row className="mb-3">
+    //       <FormGroup>
+    //         <Col>
+    //           <label>FirstName</label>
+    //         </Col>
+    //         <Col>
+    //           <input
+    //             id="firstName"
+    //             type="text"
+    //             className="form-control"
+    //             {...register("firstName", { required: true, maxLength: 10 })}
+    //           />
+    //           <FormText color="muted">
+    //             {errors.firstName?.message}
+    //           </FormText>
+    //         </Col>
+    //       </FormGroup>
+    //     </Row>
 
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
 
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
+    //     {/*---- AGE ----*/}
+    //     <Row className="mb-3">
+    //       <FormGroup>
+    //         <Col>
+    //           <label>Age</label>
+    //         </Col>
+    //         <Col>
+    //           <input id="age" type="number" className="form-control" 
+    //           {...register("age", {required: true, min: 18, max: 99})}/>
+    //           <FormText color="muted">
+    //             {errors.age?.message}
+    //           </FormText>
+    //         </Col>
+    //       </FormGroup>
+    //     </Row>
 
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
+    //     {/*---- EMAIL ----*/}
+    //     <Row className="mb-3">
+    //       <FormGroup>
+    //         <Col>
+    //         <label>Email</label>
+    //         </Col>
+    //         <Col>
+    //         <input id="email" type="email" className="form-control"
+    //         {...register("email", {required:true})}/>
+    //         <FormText>{errors.email?.message}</FormText>
+    //         </Col>
+    //       </FormGroup>
+    //     </Row>
 
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
-  )
+    //     <Row className="mb-3">
+    //       <FormGroup>
+    //         <Col>
+    //           <button className="float-end btn btn-secondary">Submit</button>
+    //         </Col>
+    //       </FormGroup>
+    //     </Row>
+
+    //     {/* ---- CHECK ---- */}
+    //     <Row className="mb-3">
+    //       <FormGroup>
+    //       <input
+    //       name="terms"
+    //       type="checkbox"
+    //       {...register('terms')}
+    //       id="terms"
+    //       className={`form-check-input ${errors.terms ? 'is-invalid' : ''}`}/>
+
+    //       <label>Accept Terms & Conditons</label>
+    //       <div className="invalid-feedback">{errors.terms?.message}</div>
+    //       </FormGroup>
+    //     </Row>
+
+
+    //   </form>
+    // </div>
+  );
 }
